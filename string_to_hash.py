@@ -23,28 +23,23 @@ TRAN = [ord(x) for x in
 
 
 class Hash64(object):
-    def __init__(self):
-        """
-        A class for generating hash strings of length 64 (characters represent base 16 numbers) in python 3.4.
-        The only callable method is `string_to_64hash` that receives a string and returns the hash strings.
-        for more information please see: `https://en.wikipedia.org/wiki/Nilsimsa_Hash`
-        """
-        pass
+    """A class for generating hash strings of length 64 (characters represent base 16 numbers) in python 3.4.
+    The only callable method is `string_to_64hash` that receives a string and returns the hash strings.
+    for more information please see: `https://en.wikipedia.org/wiki/Nilsimsa_Hash`."""
 
     def _tran_hash(self, a, b, c, n):
-        """implementation of the tran53 hash function"""
+        """Implementation of the tran53 hash function"""
+
         return ((TRAN[(a + n) & 255] ^ TRAN[b] * (n + n + 1)) + TRAN[c ^ TRAN[n]]) & 255
 
     def _hexdigest(self, vec):
-        """
-         computes the hex of the digest
-        """
+        """Computes the hex of the digest"""
+
         return ''.join('%02x' % i for i in vec)
 
     def _compute_digest(self, acc, num_char):
-        """
-         using a threshold (mean of the accumulator), computes the nilsimsa digest
-         """
+        """Using a threshold (mean of the accumulator), computes the nilsimsa digest"""
+
         num_trigrams = 0
         if num_char == 3:  # 3 chars -> 1 trigram
             num_trigrams = 1
@@ -64,10 +59,8 @@ class Hash64(object):
         return digest[::-1]  # store result in digest, reversed
 
     def _process(self, chunk):
-        """
-         computes the hash of all of the trigrams in the chunk using a window
-         of length 5
-         """
+        """Computes the hash of all of the trigrams in the chunk using a window of length 5"""
+
         num_char = 0
         acc = [0] * 256
         window = []
@@ -103,5 +96,11 @@ class Hash64(object):
         :param string: Unicode string (text) to be hashed
         :return: a hashed  string of length 64
         """
+        
         acc, num_char = self._process(string)
         return self._hexdigest(self._compute_digest(acc=acc, num_char=num_char))
+
+if __name__ == "__main__":
+    hash_generator = Hash64()
+    print(list(hash_generator.string_to_64hash("All work and no play made Hossein a dull boy")))
+    print(list(hash_generator.string_to_64hash("All work and no play made Hossein a dull boy / ")))
