@@ -12,7 +12,7 @@ Nilsima (a locality sensetive hashing function) in Python 3. For more info pleas
 
 #### API and usage
 
-```
+```Python
 from string_to_hash import Hash64
 
 if __name__ == "__main__":
